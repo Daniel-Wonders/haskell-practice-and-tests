@@ -12,7 +12,7 @@ sumaDistintos x y z | (x==y)&&(y==z)  =x        --If the 3 input are the same
 
 digitoUnidades:: Int->Int
 digitoUnidades x|(x>=0)= mod x 10               --If it's positive, mod
-                |otherwise =mod(-x) 10       --If it's negative, multiply by -1 and mod
+                |otherwise =mod (-x) 10       --If it's negative, multiply by -1 and mod
 
 digitoDecenas::Int->Int
 digitoDecenas x | (x>=0) = mod (x- digitoUnidades x) 100       --If it's positive, 
@@ -26,15 +26,15 @@ todoMenor (x,y) (z,w) | x<z && y<w = True       --If both numbers from the first
                       | otherwise = False
 
 distanciaPuntos::(Float,Float)->(Float,Float)->Float
-distanciaPuntos (x,y) (z,w) = sqrt(((x-z)*(x-z))+((y-w)*(y-w))) --Returns the distance between 2 pont in R2 hehe xd
+distanciaPuntos (x,y) (z,w) = sqrt (((x-z)*(x-z))+((y-w)*(y-w))) --Returns the distance between 2 pont in R2 hehe xd
 
 sumaTerna::(Int,Int,Int)->Int
-sumaTerna (x,y,z) = (x+y+z)         
+sumaTerna (x,y,z) = (x+y+z)
 
 chequearMultiplo:: Int->Int->Int
-chequearMultiplo x y | (mod(x) y)==0 =x --if the resto between the module of x and y is 0 (they are multiplos) return the number
+chequearMultiplo x y | (mod (x) y)==0 =x --if the resto between the module of x and y is 0 (they are multiplos) return the number
                      | otherwise=0         --if not, return 0
-                    
+
 
 sumarSoloMultiplos::(Int,Int,Int)->Int->Int
 sumarSoloMultiplos (x,y,z) q=((chequearMultiplo x q)+(chequearMultiplo y q)+(chequearMultiplo z q)) --Sum the checks of the numbers
@@ -57,7 +57,7 @@ crearPar x y=(x,y)
 fibonacci::Int->Int
 fibonacci x | x==0=0
             | x==1=1
-            |otherwise =(fibonacci(x-1) + fibonacci(x-2))
+            |otherwise =(fibonacci (x-1) + fibonacci (x-2))
 
 --Con pattern matching
 --fibo:: Int->Int
@@ -68,15 +68,15 @@ fibonacci x | x==0=0
 
 parteEntera::Float->Int
 parteEntera x | x>=0 && x>1=0
-              | x>1 = parteEntera(x-1) +1
-              | x <=0 = parteEntera(x+1) + 1
-              | x<=0 = parteEntera(x+1) -1
+              | x>1 = parteEntera (x-1) +1
+              | x <=0 = parteEntera (x+1) + 1
+              | x<=0 = parteEntera (x+1) -1
 
 
 esDivisible::Integer->Integer->Bool
 esDivisible x y| x ==y =True
-               |x>y = esDivisible x (y+y) 
-               |otherwise =False 
+               |x>y = esDivisible x (y+y)
+               |otherwise =False
 
 
 --jercicio 4. Especificar e implementar la funci´on 
@@ -90,7 +90,7 @@ sumaImpares x | x==1=1
 
 medioFact::Integer->Integer
 medioFact x | x==0 ||x==1 = 1
-            |otherwise = medioFact(x-2) * x
+            |otherwise = medioFact (x-2) * x
 
 --jercicio 6. Especificar e implementar la funci´on 
 --sumaDigitos :: Integer ->Integer que calcula la suma de d´ıgitos de un n´umero natural. Para esta funci´on pueden utilizar div y mod.
@@ -109,7 +109,7 @@ sumatoria2ICuadrado x | x==0=1
 
 sumatoriaQALAN::Integer->Integer->Integer
 sumatoriaQALAN x y | x==1 = y^1
-                   | otherwise= sumatoriaQALAN(x-1) y + (y^x)
+                   | otherwise= sumatoriaQALAN (x-1) y + (y^x)
 
 
 --13    
@@ -158,7 +158,7 @@ sumaDePrimos x i | i >= x = 0
                  | otherwise = sumaDePrimos x (i+1) + siEsPrimo x
 
 esSumaInicialDePrimos::Integer->Bool
-esSumaInicialDePrimos x | x== sumaDePrimos x 2 = True 
+esSumaInicialDePrimos x | x== sumaDePrimos x 2 = True
                         | otherwise = False
 
 --sumatoria4::Integer->Float->Float
@@ -181,8 +181,8 @@ pertenece x arr | x== head arr=True
 
 sacarBlancoRepetidos::[Char]->[Char] -- no anda
 sacarBlancoRepetidos []=""
-sacarBlancoRepetidos (x:y:xs) | x==' ' && y==x =sacarBlancoRepetidos(xs) ++[x]
-                              |otherwise = sacarBlancoRepetidos(xs)++[y]++[x]
+sacarBlancoRepetidos (x:y:xs) | x==' ' && y==x =sacarBlancoRepetidos (xs) ++[x]
+                              |otherwise = sacarBlancoRepetidos (xs)++[y]++[x]
 
 --2
 ultimo::[t]->t
@@ -191,7 +191,7 @@ ultimo (x:xs) = ultimo xs
 
 --3
 principio::[Int]->[Int]
-principio (x:xs) = ([x]++xs) ++ [0] ++ [(length([x]++xs))-1]
+principio (x:xs) = ([x]++xs) ++ [0] ++ [(length ([x]++xs))-1]
 
 --4
 reverso::[t]->[t]
@@ -213,7 +213,7 @@ todosIguales (x:xs) | x== head xs = todosIguales xs
 --2.3
 recorredor::Eq t=>t->[t]->Bool
 recorredor _ [x] =True
-recorredor y (x:xs) |x /= y =recorredor y xs 
+recorredor y (x:xs) |x /= y =recorredor y xs
                     |otherwise= False
 
 todosDistintos::Eq t=>[t]->Bool
@@ -251,12 +251,12 @@ eliminarRepetidos (x:xs)| seRepite x xs  = eliminarRepetidos xs
 mismosElementos::Eq t=> [t]->[t]->Bool
 mismosElementos [] _ = True
 mismosElementos _ [] =False
-mismosElementos x y | pertenece (head x) (eliminarRepetidos y) && pertenece (head y)(eliminarRepetidos x) =mismosElementos (eliminarRepetidos (tail x)) (eliminarRepetidos (tail y))
+mismosElementos x y | pertenece (head x) (eliminarRepetidos y) && pertenece (head y) (eliminarRepetidos x) =mismosElementos (eliminarRepetidos (tail x)) (eliminarRepetidos (tail y))
                          | otherwise =False--ya no lo voy a intentar
 
 --3.3
 maximo::[Integer]->Integer
-maximo [x]=x 
+maximo [x]=x
 maximo (x:xs)|esMayor x xs =x
              |otherwise = maximo xs
 
@@ -271,13 +271,13 @@ esMayor x (y:ys)| x>y && esMayor x ys= True
 ordenar::[Integer]->[Integer]
 ordenar []=[]
 ordenar xs =  ordenar (quitar (maximo xs) xs) ++ [maximo xs]
-              
+
 --Parcial 2023
 relacionesValidas::[(String,String)]->Bool
-relacionesValidas [(x,y)] | x==y = False        
+relacionesValidas [(x,y)] | x==y = False
                           | otherwise = True
 relacionesValidas ((x,y):[(z,w)]) | (x==y) ||z==w || ((x==z && y==w)||(x==w && y==z)) = False
-                                |otherwise = relacionesValidas[(x,y)]
+                                |otherwise = relacionesValidas [(x,y)]
 relacionesValidas ((x,y):(z,w):xs) | (x==y) ||z==w || ((x==z && y==w)||(x==w && y==z)) = False
                                  | otherwise = relacionesValidas ((z,w):xs)
 
@@ -325,7 +325,7 @@ elMas [x,y] = x
 elMas (x:y:xs)|repeticiones x xs == repeticiones y xs =  elMas (xs++[x]++[y])
               |repeticiones x xs > repeticiones y xs = elMas (xs++[x])
               |otherwise = elMas (y:xs)
- 
+
 personaConMasAmigos::[(String,String)]->String
 personaConMasAmigos (x)=elMas (personas2 x)
 
@@ -366,7 +366,7 @@ total (x:xs)=x+ (total xs)
 
 votosEnBlanco::[(String,String)]->[Int]->Int->Int
 votosEnBlanco _ [] _ = 0
-votosEnBlanco _ xs y = y - (total xs) 
+votosEnBlanco _ xs y = y - (total xs)
 
 --2
 
@@ -385,7 +385,7 @@ hayRepetidos (x:xs)| pertenece22 x xs =True
                    | otherwise = hayRepetidos xs
 
 formulasValidas::[(String,String)]->Bool
-formulasValidas x=not (hayRepetidos (aplanar x)) 
+formulasValidas x=not (hayRepetidos (aplanar x))
 
 --3
 
@@ -421,7 +421,7 @@ relacionesValidas2::[(String,String)]->Bool
 relacionesValidas2 [x]|fst x == snd x =False
                       | otherwise = True
 relacionesValidas2 (x:xs)| pertenece54 x xs = False
-                         | otherwise = relacionesValidas2 xs 
+                         | otherwise = relacionesValidas2 xs
 
 --2
 
@@ -440,13 +440,13 @@ sacarRepetidos (x:xs)| pertenece90 x xs = sacarRepetidos xs
                      |otherwise = [x] ++ sacarRepetidos xs
 
 personas3::[(String,String)]->[String]
-personas3 x = sacarRepetidos (aplanar2 x) 
+personas3 x = sacarRepetidos (aplanar2 x)
 
 --3
 
 amigosDe2::String->[(String,String)]->[String]
 amigosDe2 _ [] = []
-amigosDe2 x (y:ys)| x== fst y=[snd y]++ amigosDe2 x ys 
+amigosDe2 x (y:ys)| x== fst y=[snd y]++ amigosDe2 x ys
                   | x== snd y = [fst y] ++ amigosDe2 x ys
                   |otherwise = amigosDe2 x ys
 
@@ -461,7 +461,7 @@ aplanadaSinRepetir::[(String,String)]->[String]
 aplanadaSinRepetir x = sacarRepetidos (aplanar2 x)
 
 comparar::[String]->[(String,String)]->String
-comparar [x] _ = x 
+comparar [x] _ = x
 comparar [x,y] ys |longitudString (amigosDe2 x ys) >= longitudString (amigosDe2 y ys) = x
                   |otherwise = y
 comparar (x:y:xs) ys | longitudString (amigosDe2 x ys) >= longitudString (amigosDe2 y ys) = comparar (x:xs) ys
@@ -585,7 +585,7 @@ codificarFrase (x:xs) cs | hayQueCodificar x cs = [encontrarPareja x cs]++ codif
                          | otherwise = [x] ++ codificarFrase xs cs
 
 
-                
+
 --Parcial de la tarde 1er cuatri 2024
 
 --1
@@ -611,7 +611,7 @@ sumaDe [] = 0
 sumaDe (x:xs) = x + (sumaDe xs)
 
 promedio::[Int]->Float
-promedio x = (fromIntegral(sumaDe x)) / (fromIntegral(longitud123 x))
+promedio x = (fromIntegral (sumaDe x)) / (fromIntegral (longitud123 x))
 
 tieneAplazos::[Int]->Bool
 tieneAplazos [x]|x<4= True
@@ -621,7 +621,7 @@ tieneAplazos (x:xs)| x<4= True
 
 buenosAlumnos::[([Char],[Int])]->[[Char]]
 buenosAlumnos []  = []
-buenosAlumnos ((a,b):xs)| (promedio b >= 8)&& not(tieneAplazos b) = [a]++(buenosAlumnos xs)
+buenosAlumnos ((a,b):xs)| (promedio b >= 8)&& not (tieneAplazos b) = [a]++(buenosAlumnos xs)
                         | otherwise = buenosAlumnos xs
 
 
@@ -644,7 +644,7 @@ promedioSirve x ys| (promedio (mejorPromedio2 ys)) - promedio x < 1 = True
                   | otherwise = False
 
 seGraduoConHonores::[([Char],[Int])]->Int->[Char]->Bool
-seGraduoConHonores ((a,b):xs) cantMaterias alumno | (a==alumno) && (promedio b >=8) && not(tieneAplazos b) && (aproboMasDeNMaterias [(a,b)] alumno (cantMaterias - 1)) && (promedioSirve b ((a,b):xs)) = True
+seGraduoConHonores ((a,b):xs) cantMaterias alumno | (a==alumno) && (promedio b >=8) && not (tieneAplazos b) && (aproboMasDeNMaterias [(a,b)] alumno (cantMaterias - 1)) && (promedioSirve b ((a,b):xs)) = True
                                                   | (a==alumno) && (not ((promedio b >=8))|| tieneAplazos b || not (aproboMasDeNMaterias [(a,b)] alumno (cantMaterias - 1)) || not (promedioSirve b ((a,b):xs))) = False
                                                   | otherwise = seGraduoConHonores (xs++[(a,b)]) cantMaterias alumno
 
@@ -665,7 +665,7 @@ pertenece4::[Char]->[[Char]]->Bool
 pertenece4 _ [] = False
 pertenece4 x (y:ys) | x==y = True
                     | otherwise = pertenece4 x ys
- 
+
 sacarRepetidos2::[[Char]]->[[Char]]
 sacarRepetidos2 []=[]
 sacarRepetidos2 (x:xs)| pertenece4 x xs = sacarRepetidos2 xs
@@ -690,15 +690,15 @@ stockDeProducto (x:xs) y | fst x == y = snd x
 
 dineroEnStock::[([Char],Int)]->[([Char],Float)]->Float
 dineroEnStock [] _ = 0
-dineroEnStock (x:xs) (y:ys) | fst x == fst y = ((fromIntegral(snd x)) * (snd y)) + dineroEnStock xs (ys++[y])
+dineroEnStock (x:xs) (y:ys) | fst x == fst y = ((fromIntegral (snd x)) * (snd y)) + dineroEnStock xs (ys++[y])
                             | otherwise = dineroEnStock (x:xs) (ys++[y])
 
 --4
 
 aplicarOferta::[([Char],Int)]->[([Char],Float)]->[([Char],Float)]
 aplicarOferta [] _ = []
-aplicarOferta (x:xs) (y:ys) | (fst x == fst y) && (snd x > 10) = [(fst x, ((fromIntegral(snd x)) * 0.8 * snd y ))] ++ (aplicarOferta xs (ys++[y]))
-                            | (fst x == fst y) && (snd x <= 10) = [(fst x, ((fromIntegral(snd x)) * snd y ))] ++ (aplicarOferta xs (ys++[y]))
+aplicarOferta (x:xs) (y:ys) | (fst x == fst y) && (snd x > 10) = [(fst x, ((fromIntegral (snd x)) * 0.8 * snd y ))] ++ (aplicarOferta xs (ys++[y]))
+                            | (fst x == fst y) && (snd x <= 10) = [(fst x, ((fromIntegral (snd x)) * snd y ))] ++ (aplicarOferta xs (ys++[y]))
                             | otherwise = aplicarOferta (x:xs) (ys++[y])
 
 
@@ -719,4 +719,54 @@ aplicarOferta (x:xs) (y:ys) | (fst x == fst y) && (snd x > 10) = [(fst x, ((from
 -- Se entrega por gitlab
 -- ejercicio 10, donde dice decifrado es decifrar 
 
+-- Parcial 1
 
+--1
+
+pertenece5:: [Char]-> [[Char]]->Bool
+pertenece5 _ [] = False
+pertenece5 z (x:xs) | x==z =True
+                    | otherwise = pertenece5 z xs
+
+sacarRepetidos3:: [[Char]]->[[Char]]
+sacarRepetidos3 []=[]
+sacarRepetidos3 (x:xs) | pertenece5 x xs = sacarRepetidos3 xs
+                       | otherwise = [x] ++ sacarRepetidos3 xs
+
+repeticiones2::[Char]->[[Char]]->Int
+repeticiones2 _ [] = 0
+repeticiones2 producto (x:xs) | producto == x = 1 + repeticiones2 producto xs
+                              | otherwise = repeticiones2 producto xs
+
+generarAux2::[[Char]]->[[Char]]->[([Char],Int)]
+generarAux2 _ [] = []
+generarAux2  productosOg (producto:productosSr) = [(producto, repeticiones2 producto productosOg)] ++ generarAux2 productosOg productosSr
+
+generarStock2::[[Char]]->[([Char], Int)]
+generarStock2 productos = generarAux2 productos (sacarRepetidos3 productos)
+
+
+--2
+
+stockDeProducto2::[([Char],Int)]->[Char]->Int
+stockDeProducto2 [] _ = 0
+stockDeProducto2 ((item,cantidad):resto) producto | producto == item = cantidad
+                                                  | otherwise = (stockDeProducto2 resto producto)
+
+--3
+
+buscarPrecio::([Char],Int)->[([Char],Float)]->Float
+buscarPrecio (producto,cantidad) ((nombre,precio):resto) | producto==nombre = (fromIntegral cantidad * precio)
+                                                         | otherwise = (buscarPrecio (producto,cantidad) resto)
+
+dineroEnStock2::[([Char],Int)]->[([Char],Float)]->Float
+dineroEnStock2 [] _ = 0
+dineroEnStock2 (producto:stock) precios= (buscarPrecio producto precios ) + (dineroEnStock2 stock precios)
+
+--4
+
+aplicarOferta2::[([Char],Int)]->[([Char],Float)]->[([Char],Float)]
+aplicarOferta2 _ [] = []
+aplicarOferta2 ((producto,cantidad):stock) ((nombre,precio):precios) | (producto==nombre) && (cantidad>10) = [(nombre,(precio * 0.8))] ++ (aplicarOferta2 stock precios)
+                                                                     | (producto==nombre) && (cantidad<=10) = [(nombre, (precio))] ++ (aplicarOferta2 stock precios)
+                                                                     | otherwise = aplicarOferta2 ((producto,cantidad):stock) (precios ++ [(nombre,precio)])
