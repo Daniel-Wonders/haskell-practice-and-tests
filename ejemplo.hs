@@ -1,5 +1,5 @@
 import System.IO.Error (isIllegalOperationErrorType)
-import System.Win32 (COORD(xPos), xBUTTON1, SECURITY_ATTRIBUTES (bInheritHandle))
+import System.Win32 (COORD(xPos, yPos), xBUTTON1, SECURITY_ATTRIBUTES (bInheritHandle))
 doubleMe x = x + x
 
 sumaDistintos:: Int->Int->Int->Int
@@ -770,3 +770,112 @@ aplicarOferta2 _ [] = []
 aplicarOferta2 ((producto,cantidad):stock) ((nombre,precio):precios) | (producto==nombre) && (cantidad>10) = [(nombre,(precio * 0.8))] ++ (aplicarOferta2 stock precios)
                                                                      | (producto==nombre) && (cantidad<=10) = [(nombre, (precio))] ++ (aplicarOferta2 stock precios)
                                                                      | otherwise = aplicarOferta2 ((producto,cantidad):stock) (precios ++ [(nombre,precio)])
+
+
+        
+
+--VAMOS CAMPEÓN!
+--En Exactas se está jugando un torneo de futbol y la facultad le pidió a los alumnos de IP programar algunas funcionalidades en Haskell.
+--Los datos con los que contamos para esto son los nombres de los equipos que participan del torneo, los nombres de los goleadores de cada
+--uno de dichos equipo, y la cantidad de goles convertidos por esos jugadores. Los nombres de los equipos y sus respectivos goleadores serán
+--modelados mediante tuplas de tipo (String,String), donde la primera componente representa el nombre del equipo, y la segunda representa el
+--nombre del goleador de dicho equipo.
+
+--En los problemas en los cuales se reciban, como parámetros, secuencias _goleadoresPorEquipo_ y _goles_, cada posicion de la lista goles representará
+--la cantidad de goles obtenidos por el goleador del equipo que se encuentra en esa misma posición de _goleadoresPorEquipo_.
+--Por ejemplo si la lista goleadoresPorEquipo es [("Sacachispas","Robertino Giacomini"),("Fénix","Matias Dominguez")] y la lista goles es [3,5], eso indica
+--que Robertino Giacomini metió 3 goles y Matias Dominguez metió 5.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--1) Goles de no goleadores [1 punto]
+
+--problema golesDeNoGoleadores (goleadoresPorEquipo: seq⟨String x String⟩, goles: seq⟨Z⟩, totalGolesTorneo: Z ): Z {
+--    requiere: {equiposValidos(goleadoresPorEquipo)}
+--    requiere: {|goleadoresPorEquipo| = |goles|}
+--    requiere: {Todos los elementos de goles son mayores o iguales a 0}
+--    requiere: {La suma de todos los elementos de goles es menor o igual a totalGolesTorneo}
+--    asegura: {res es la cantidad de goles convertidos en el torneo por jugadores que no son los goleadores de sus equipos}
+--}
+
+--1
+sumatoria3::[Int]->Int
+sumatoria3 [] = 0
+sumatoria3 (num:resto) =num + sumatoria3 resto
+
+golesDeNoGoleadores::[(String,String)]->[Int]->Int->Int
+golesDeNoGoleadores banana goles total= total - (sumatoria3 goles)
+
+--2
+
+--2) Equipos Válidos [3 puntos]
+
+--problema equiposValidos (goleadoresPorEquipo: seq⟨String x String⟩): Bool{
+--    requiere: {True}
+--    asegura: {(res = True) <-> goleadoresPorEquipo no contiene nombres de clubes repetidos, ni goleadores repetidos, ni jugadores con nombre de club}
+--}
+
+pertenece6::String->[String]->Bool
+pertenece6 _ [] = False
+pertenece6 elem (x:xs)| elem == x = True
+                      | otherwise = pertenece6 elem xs
+
+hayRepetidos3::[String]->Bool
+hayRepetidos3 [] = False
+hayRepetidos3 (x:xs) | pertenece6 x xs = True
+                     | otherwise = hayRepetidos3 xs
+
+aplanar3::[(String,String)]->[String]
+aplanar3 []=[]
+aplanar3 ((x,y):xs) = x:y:(aplanar xs)
+
+equiposValidos::[(String,String)]->Bool
+equiposValidos lista = not(hayRepetidos3 (aplanar3 lista))
+
+--3
+
+--3) Porcentaje de Goles [3 puntos]
+
+--problema porcentajeDeGoles (goleador: String, goleadoresPorEquipo: seq⟨String x String⟩, goles: seq⟨Z⟩): R {
+--    requiere: {La segunda componente de algún elemento de goleadoresPorEquipo es goleador}
+--    requiere: {equiposValidos(goleadoresPorEquipo)}
+--    requiere: {|goleadoresPorEquipo| = |goles|}
+--    requiere: {Todos los elementos de goles son mayores o iguales a 0}
+--    requiere: {Hay al menos un elemento de goles mayor estricto a 0}
+--    asegura: {res es el porcentaje de goles que marcó goleador sobre el total de goles convertidos por goleadores}
+--}
+
+--Para resolver este ejercicio pueden utilizar la siguiente función que devuelve como Float la división entre dos numeros de tipo Int:
+division2 :: Int -> Int -> Float
+division2 a b = (fromIntegral a) / (fromIntegral b)
+
+sumatoria4::[Int]->Int
+sumatoria4 [] = 0
+sumatoria4 (x:xs) = x + sumatoria4 xs
+
+calcularProrcentaje::Int->[Int]->Float
+calcularProrcentaje gol goles = (division2 gol (sumatoria4 goles))*100
+
+encontrarGol::String->[(String,String)]->[Int]->Int
+encontrarGol goleador ((club,pj):resto) (gol:restoGoles)| goleador == pj = gol
+                                                        | otherwise = encontrarGol goleador resto restoGoles
+
+porcentajeDeGoles::String->[(String,String)]->[Int]->Float
+porcentajeDeGoles goleador goleadoresPorEquipo goles = calcularProrcentaje (encontrarGol goleador goleadoresPorEquipo goles) goles
+
+--4
+
+--4) Botín de Oro [3 puntos]
+
+--problema botinDeOro (goleadoresPorEquipo: seq⟨String x String⟩, goles: seq⟨Z⟩): String {
+--    requiere: {equiposValidos(goleadoresPorEquipo)}
+--    requiere: {|goleadoresPorEquipo| = |goles|}
+--    requiere: {Todos los elementos de goles son mayores o iguales a 0}
+--    requiere: {|goles| > 0}
+--    asegura: {res es alguno de los goleadores de goleadoresPorEquipo que más tantos convirtió de acuerdo a goles}
+--}
+
+botinDeOro::[(String,String)]->[Int]->String
+botinDeOro [(x,y)] [gol] = y
+botinDeOro (x:xs) (gol:goles)| gol >= head(goles) = botinDeOro (xs++[x]) (goles++[gol])
+                             | otherwise = botinDeOro xs goles
