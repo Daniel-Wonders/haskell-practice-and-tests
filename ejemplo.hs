@@ -879,3 +879,95 @@ botinDeOro::[(String,String)]->[Int]->String
 botinDeOro [(x,y)] [gol] = y
 botinDeOro (x:xs) (gol:goles)| gol >= head(goles) = botinDeOro (xs++[x]) (goles++[gol])
                              | otherwise = botinDeOro xs goles
+
+{-
+1) Atajaron Suplentes
+problema atajaronSuplentes (arquerosPorEquipo: seq<String X String>, goles: seq<Z>, totalGolesTorneo: Z): Z {
+	requiere: {equiposValidos(arquerosPorEquipo)
+	requiere: {|arquerosPorEquipo| = |goles|}
+	requiere: {Todos los elementos de goles son mayores o iguales a 0}
+	requiere: {La suma de todos los elementos de goles es menor o igual a totalGolesTorneo}
+	asegura: {
+	res es la cantidad de goles recibidos en el torneo por arqueros que no son titulares en sus equipos.
+	}
+}-}
+
+sumatoria5::[Int]->Int
+sumatoria5 [] = 0
+sumatoria5 (gol:goles) = gol + sumatoria5 goles
+
+atajaronSuplentes::[(String,String)]->[Int]->Int->Int
+atajaronSuplentes _ golesArr goles = goles -(sumatoria5 golesArr)
+
+
+{-2) Equipos Válidos
+problema equiposValidos (arquerosPorEquipo: seq<String X String>): Bool {
+	requiere: {True}
+	asegura: {
+	(res = True) <=> arquerosPorEquipo no contiene nombres de clubes repetidos, ni arqueros repetidos, ni jugadores con nombre del club
+	}
+-}
+
+pertenece8::String->[String]->Bool
+pertenece8 _ []  = False
+pertenece8 x (c:cz) | x==c = True
+                    | otherwise = pertenece8 x cz
+
+
+hayRepetidos4::[String]->Bool
+hayRepetidos4 [] = False
+hayRepetidos4 (x:xs)| pertenece8 x xs = True
+                    | otherwise = hayRepetidos4 xs
+
+aplanar4::[(String,String)]->[String]
+aplanar4 [] = []
+aplanar4 (x:xs) = [fst x] ++ [snd x] ++ aplanar4 xs
+
+equiposValidos2::[(String,String)]->Bool
+equiposValidos2 equipos = not(hayRepetidos4 (aplanar4 equipos))
+
+{-3) Porcentaje de goles
+problema porcentajeDeGoles (arquero: String, arquerosPorEquipo: seq<String X String>, goles: seq<Z>): R {
+	requiere: {La segunda componente de algún elemento de arquerosPorEquipo es arquero}
+	requiere: {equiposValidos(arquerosPorEquipo)}
+	requiere: {|arquerosPorEquipo| = |goles|}
+	requiere: {Todos los elementos de goles son mayores o iguales a 0}
+	requiere: {Hay al menos un elemento de goles mayores estricto a 0}
+	asegura: {
+	res es el porcentaje de goles que recibió arquero sobre el total de goles recibidos por arqueros titulares
+	}
+}
+
+Para resolver este ejercicio pueden utilizar la siguiente función que devuelve como float la división entre dos
+numeros de tipo Int.
+
+division :: Int -> Int -> Float
+division a b = fromIntegral a / fromIntegral b
+-}
+
+sumatoria6::[Int]->Int
+sumatoria6 [] =0
+sumatoria6 (x:xs) =x + sumatoria6 xs
+
+calcularProrcentaje2::Int->[Int]->Float
+calcularProrcentaje2 gol goles = (division gol (sumatoria6 goles))*100
+
+porcentajeDeGoles2::String->[(String,String)]->[Int]->Float
+porcentajeDeGoles2 arquero (x:xs) (y:ys)| arquero == snd x = calcularProrcentaje2 y (y:ys)
+                                        | otherwise = porcentajeDeGoles2 arquero (xs++[x]) (ys++[y]) 
+
+{-4) Valla Menos Vencida
+problema vallaMenosVencida (arquerosPorEquipo: seq<String X String>, goles: seq<Z>): String {
+	requiere: {equiposValidos(arquerosPorEquipo)}
+	requiere: {|arquerosPorEquipo| = |goles|}
+	requiere: {Todos los elementos de goles son mayores o iguales a 0}
+	requiere: {|goles| > 0}
+	asegura: {
+	res es alguno de los arqueros de arquerosPorEquipo que menor goles recibió de acuerdo a goles
+-}
+
+vallaMenosVencida::[(String,String)]->[Int]->String
+vallaMenosVencida [arquero] _ = snd arquero
+vallaMenosVencida (arquero:arqueros) (gol:goles)| gol<=(head goles) =vallaMenosVencida (arqueros++[arquero]) (goles++[gol]) 
+                                                | otherwise = vallaMenosVencida arqueros goles
+
