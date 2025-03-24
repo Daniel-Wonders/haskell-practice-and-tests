@@ -971,3 +971,25 @@ vallaMenosVencida [arquero] _ = snd arquero
 vallaMenosVencida (arquero:arqueros) (gol:goles)| gol<=(head goles) =vallaMenosVencida (arqueros++[arquero]) (goles++[gol]) 
                                                 | otherwise = vallaMenosVencida arqueros goles
 
+--
+
+{-2. descomponerEnPrimos :: [Integer] -> [[Integer]] seg´un la siguiente especificaci´on:
+problema descomponerEnPrimos (s: seq⟨Z⟩) : seq⟨seq⟨Z⟩⟩ {
+requiere: { Todos los elementos de s son mayores a 2 }
+asegura: { |resultado| = |s| }
+asegura: {todos los valores en las listas de resultado son n´umeros primos}
+asegura: {multiplicar todos los elementos en la lista en la posici´on i de resultado es igual al valor en la posici´on
+i de s}
+}
+Por ejemplo descomponerEnPrimos [2, 10, 6] es [[2], [2, 5], [2, 3]].-}
+
+
+
+descomponerEnPrimos::[Integer]->[[Integer]]
+descomponerEnPrimos [] = []
+descomponerEnPrimos (num:demas) = ((factoresPrimos num 2):descomponerEnPrimos(demas))
+
+factoresPrimos::Integer->Integer->[Integer]
+factoresPrimos 1 _ = []
+factoresPrimos num indiceAux | mod num indiceAux == 0 = indiceAux:(factoresPrimos (div num indiceAux) indiceAux)
+                             | otherwise = factoresPrimos num (indiceAux+1)
