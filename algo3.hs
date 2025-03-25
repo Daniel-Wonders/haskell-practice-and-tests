@@ -30,6 +30,7 @@ factorAux::Int->Int->Int->Int
 factorAux n cont num | n==cont = num
                      | otherwise = factorAux n (cont+1) (num*(cont+1))
 
+
 cantDivisoresPrimos::Int->Int
 cantDivisoresPrimos n =largo(divisoresPrimos n 1)
 
