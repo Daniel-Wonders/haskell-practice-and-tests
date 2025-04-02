@@ -63,11 +63,11 @@ divisores num cont | cont > num = []
 --de cada uno de los nodos.
 --c. productoAB :: AB Int → Int que calcula el producto de todos los nodos del árbol.
 
-data AB a = Nil | Bin (AB a) a (AB a)
 
-vacioAB :: AB a -> Bool
+{--vacioAB :: AB a -> Bool
 vacioAB Nil = True
 vacioAB x = False 
+--}
 
 foldr::(a->b->b)->b->[a]->b
 foldr _ z [] = z
@@ -99,3 +99,36 @@ foldl funcion acumulador (x:xs) = foldl funcion (funcion acumulador x) xs
 
 bin2dec = foldl(\ac b-> b + 2 * ac)
 
+data AEB a = Hoja a | Bin (AEB a) a (AEB a)
+
+miArbol=Bin (Hoja 3) 5 (Bin (Hoja 7) 8 (Hoja 1))
+
+foldAEB::(a->b)->(b->a->b->b)->AEB a ->b
+foldAEB casoHoja casoBin (Hoja e) = casoHoja e
+foldAEB casoHoja casoBin (Bin izq raiz der) = casoBin (rec izq) raiz (rec der)
+    where rec = foldAEB casoHoja casoBin
+    
+ramasAEB::AEB a ->[[a]]
+ramasAEB = foldAEB (\x -> [[x]])(\recIzq raiz recDer -> map(raiz:)(recIzq++recDer))
+
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr _ z [] = z
+recr f z (x : xs) = f x xs (recr f z xs)
+
+--6
+sacarUna :: Eq a => a -> [a] -> [a]
+sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list 
+
+--b) es primitiva porque utiliza la cola explicitamente
+
+insertarOrdenado :: Ord a => a -> [a] -> [a]
+insertarOrdenado num = recr (\x xs rec -> if num <= x then num : x : xs else x : rec) [num]
+
+
+
+--7 ?????????
+
+mapPares::(a->b->c)->[tuple(a,b)]->[tuple(a,b)]
+mapPares _  [] = []
+mapPares f (x:xs) = f(x):rec xs
+    where rec = mapPares f 
