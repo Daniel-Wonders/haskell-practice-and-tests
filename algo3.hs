@@ -1,3 +1,4 @@
+import Prelude hiding (foldr, map, filter, foldl)
 -- practica 0
 --
 --1)
@@ -67,4 +68,34 @@ data AB a = Nil | Bin (AB a) a (AB a)
 vacioAB :: AB a -> Bool
 vacioAB Nil = True
 vacioAB x = False 
+
+foldr::(a->b->b)->b->[a]->b
+foldr _ z [] = z
+foldr f z (x:xs) = f x (foldr f z xs)
+
+suma::Int->Int->Int
+suma x y = x+y
+
+foldrSum::Int->Int->Int
+foldrSum x y = foldr (+) 0 (x:[y])
+
+--foldrElem::Eq a=>a->[a]->Bool
+--foldrElem num xs = foldr () []
+
+map::(a->b)->[a]->[b]
+map f [] = []
+map f (x:xs) = f x : map f xs
+
+filter::(a->Bool)->[a]->[a]
+filter p []  =  []
+filter p (x:xs) = if p x then x:filter p xs else filter p xs
+
+filterfoldr::(a->Bool)->[a]->[a]
+filterfoldr p = foldr (\x xs -> if p x then x:xs else xs)[] 
+
+foldl::(b->a->b )->b->[a]->b
+foldl funcion acumulador [] = acumulador
+foldl funcion acumulador (x:xs) = foldl funcion (funcion acumulador x) xs
+
+bin2dec = foldl(\ac b-> b + 2 * ac)
 
