@@ -1,3 +1,4 @@
+import Prelude hiding (foldr, map, filter, foldl)
 -- practica 0
 --
 --1)
@@ -52,6 +53,84 @@ divisores num cont | cont > num = []
                    | otherwise = divisores num (cont+1)
 
 
+--Ejercicio 5
+--Dado el siguiente modelo para árboles binarios:
+--data AB a = Nil | Bin (AB a) a (AB a)
+--definir las siguientes funciones:
+--a. vacioAB :: AB a → Bool que indica si un árbol es vacío (i.e. no tiene nodos).
+--b. negacionAB :: AB Bool → AB Bool que dado un árbol de booleanos construye otro formado por la negación
+--de cada uno de los nodos.
+--c. productoAB :: AB Int → Int que calcula el producto de todos los nodos del árbol.
+
+
+{--vacioAB :: AB a -> Bool
+vacioAB Nil = True
+vacioAB x = False 
+--}
+
+foldr::(a->b->b)->b->[a]->b
+foldr _ z [] = z
+foldr f z (x:xs) = f x (foldr f z xs)
+
+suma::Int->Int->Int
+suma x y = x+y
+
+foldrSum::Int->Int->Int
+foldrSum x y = foldr (+) 0 (x:[y])
+
+--foldrElem::Eq a=>a->[a]->Bool
+--foldrElem num xs = foldr () []
+
+map::(a->b)->[a]->[b]
+map f [] = []
+map f (x:xs) = f x : map f xs
+
+filter::(a->Bool)->[a]->[a]
+filter p []  =  []
+filter p (x:xs) = if p x then x:filter p xs else filter p xs
+
+filterfoldr::(a->Bool)->[a]->[a]
+filterfoldr p = foldr (\x xs -> if p x then x:xs else xs)[] 
+
+foldl::(b->a->b )->b->[a]->b
+foldl funcion acumulador [] = acumulador
+foldl funcion acumulador (x:xs) = foldl funcion (funcion acumulador x) xs
+
+bin2dec = foldl(\ac b-> b + 2 * ac)
+
+data AEB a = Hoja a | Bin (AEB a) a (AEB a)
+
+miArbol=Bin (Hoja 3) 5 (Bin (Hoja 7) 8 (Hoja 1))
+
+foldAEB::(a->b)->(b->a->b->b)->AEB a ->b
+foldAEB casoHoja casoBin (Hoja e) = casoHoja e
+foldAEB casoHoja casoBin (Bin izq raiz der) = casoBin (rec izq) raiz (rec der)
+    where rec = foldAEB casoHoja casoBin
+    
+ramasAEB::AEB a ->[[a]]
+ramasAEB = foldAEB (\x -> [[x]])(\recIzq raiz recDer -> map(raiz:)(recIzq++recDer))
+
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr _ z [] = z
+recr f z (x : xs) = f x xs (recr f z xs)
+
+--6
+sacarUna :: Eq a => a -> [a] -> [a]
+sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list 
+
+--b) es primitiva porque utiliza la cola explicitamente
+
+insertarOrdenado :: Ord a => a -> [a] -> [a]
+insertarOrdenado num = recr (\x xs rec -> if num <= x then num : x : xs else x : rec) [num]
+
+
+
+--7 ?????????
+
+mapPares::(a->b->c)->[tuple(a,b)]->[tuple(a,b)]
+mapPares _  [] = []
+mapPares f (x:xs) = f(x):rec xs
+    where rec = mapPares f 
 --Practica 1
 --1)
 --max2::Float->Float N
