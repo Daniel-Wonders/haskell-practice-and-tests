@@ -12,7 +12,6 @@
 -- concat:: [[a]]->[a] Concatena una lista de listas en una sola lista.
 -- reverse:: [a]->[a] Invierte el orden de los elementos de la lista.
 -- elem:: Eq a=> a->[a] Devuelve true o false si esta el elemento en la lista 
--- length:: [a]->Int Devuelve el largo
 
 --2)
 
@@ -53,18 +52,26 @@ divisores num cont | cont > num = []
                    | otherwise = divisores num (cont+1)
 
 
---Ejercicio 5
---Dado el siguiente modelo para árboles binarios:
---data AB a = Nil | Bin (AB a) a (AB a)
---definir las siguientes funciones:
---a. vacioAB :: AB a → Bool que indica si un árbol es vacío (i.e. no tiene nodos).
---b. negacionAB :: AB Bool → AB Bool que dado un árbol de booleanos construye otro formado por la negación
---de cada uno de los nodos.
---c. productoAB :: AB Int → Int que calcula el producto de todos los nodos del árbol.
+--Practica 1
+--1)
+--max2::Float->Float N
+--normaVectorial::Float->Float->Float N
+--subtract::Float->Float Y (-)Float->Float
+--predecesor::Float->Float Y Float->Float
+--evaluarEnCero 
 
-data AB a = Nil | Bin (AB a) a (AB a)
+--2)
+curry :: ((a, b) -> c) -> a -> b -> c
+curry f x y = f (x, y)
 
-vacioAB :: AB a -> Bool
-vacioAB Nil = True
-vacioAB x = False 
+uncurry::a->b->c->((a,b)->c)
+uncurry f(x,y)= f x y 
+
+--No
+
+--3)
+
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ z []     = z
+foldr f z (x:xs) = f x (foldr f z xs)
 
