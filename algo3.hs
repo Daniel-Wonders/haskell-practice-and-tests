@@ -121,29 +121,17 @@ sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list
 --b) es primitiva porque utiliza la cola explicitamente
 
 insertarOrdenado :: Ord a => a -> [a] -> [a]
-insertarOrdenado num = recr (\x xs rec -> if num <= x then num:x:xs else x : rec) [num]
+insertarOrdenado num = recr (\x xs rec -> if num <= x then num : x : xs else x : rec) [num]
 
 
 
 --7 ?????????
-{--
+
 mapPares::(a->b->c)->[tuple(a,b)]->[tuple(a,b)]
 mapPares _  [] = []
 mapPares f (x:xs) = f(x):rec xs
-    where rec = mapPares f  
---}
-
---9
-
-foldNat :: (Integer -> a -> a) -> a -> Integer -> a
-foldNat f z n
-  | n <= 0    = z
-  | otherwise = f n (foldNat f z (n - 1))
-
-potencia :: Integer -> Integer -> Integer
-potencia num pot = foldNat (\_ acc -> num * acc) 1 pot
-
-
+    where rec = mapPares f 
+--Practica 1
 --1)
 --max2::Float->Float N
 --normaVectorial::Float->Float->Float N
@@ -152,18 +140,17 @@ potencia num pot = foldNat (\_ acc -> num * acc) 1 pot
 --evaluarEnCero 
 
 --2)
-{--
 curry :: ((a, b) -> c) -> a -> b -> c
 curry f x y = f (x, y)
 
 uncurry::a->b->c->((a,b)->c)
 uncurry f(x,y)= f x y 
---}
+
 --No
 
 --3)
-{--
+
 foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _ z []     = z
 foldr f z (x:xs) = f x (foldr f z xs)
---}
+
