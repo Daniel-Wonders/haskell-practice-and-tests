@@ -14,6 +14,14 @@ pero distinto tipo, ej: (1,(true,"hola")) - ("hola",(1, true))
 ej2 funcion curry
 
 
+con axiomas podemos demostrar cosas
+
+x>y    ,     y>o
+-----------------trans
+x>o
+
+
+
 
 
 --}
