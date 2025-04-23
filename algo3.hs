@@ -13,6 +13,7 @@ import Prelude hiding (foldr, map, filter, foldl)
 -- concat:: [[a]]->[a] Concatena una lista de listas en una sola lista.
 -- reverse:: [a]->[a] Invierte el orden de los elementos de la lista.
 -- elem:: Eq a=> a->[a] Devuelve true o false si esta el elemento en la lista 
+-- length:: [a]->Int Devuelve el largo
 
 --2)
 
@@ -98,6 +99,7 @@ foldl funcion acumulador (x:xs) = foldl funcion (funcion acumulador x) xs
 
 bin2dec = foldl(\ac b-> b + 2 * ac)
 
+{--
 data AEB a = Hoja a | Bin (AEB a) a (AEB a)
 
 miArbol=Bin (Hoja 3) 5 (Bin (Hoja 7) 8 (Hoja 1))
@@ -109,6 +111,7 @@ foldAEB casoHoja casoBin (Bin izq raiz der) = casoBin (rec izq) raiz (rec der)
     
 ramasAEB::AEB a ->[[a]]
 ramasAEB = foldAEB (\x -> [[x]])(\recIzq raiz recDer -> map(raiz:)(recIzq++recDer))
+--}
 
 recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr _ z [] = z
@@ -120,18 +123,58 @@ sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list
 
 --b) es primitiva porque utiliza la cola explicitamente
 
-insertarOrdenado :: Ord a => a -> [a] -> [a]
-insertarOrdenado num = recr (\x xs rec -> if num <= x then num : x : xs else x : rec) [num]
-
-
 
 --7 ?????????
 
 mapPares::(a->b->c)->[tuple(a,b)]->[tuple(a,b)]
 mapPares _  [] = []
+
+
+--b) es primitiva porque utiliza la cola explicitamente
+
+insertarOrdenado :: Ord a => a -> [a] -> [a]
+insertarOrdenado num = recr (\x xs rec -> if num <= x then num:x:xs else x : rec) [num]
+
+
+
+--7 ?????????
+{--
+mapPares::(a->b->c)->[tuple(a,b)]->[tuple(a,b)]
+mapPares _  [] = []
 mapPares f (x:xs) = f(x):rec xs
-    where rec = mapPares f 
---Practica 1
+    where rec = mapPares f  
+--}
+
+--9
+
+foldNat :: (Integer -> a -> a) -> a -> Integer -> a
+foldNat f z n
+  | n <= 0    = z
+  | otherwise = f n (foldNat f z (n - 1))
+
+potencia :: Integer -> Integer -> Integer
+potencia num pot = foldNat (\_ acc -> num * acc) 1 pot
+
+--10
+genLista::a->(a->a)->Integer->[a]
+genLista arranca f cant = foldNat(\_ acc -> acc ++ [f (last acc)]) [arranca] (cant-1)                 
+
+--Usando genLista, denir la función desdeHasta, que dado un par de números (el primero menor que el
+--segundo), devuelve una lista de números consecutivos desde el primero hasta el segundo.
+
+desdeHasta::Integer->Integer->[Integer]
+desdeHasta desde hasta = genLista desde (+1) ((hasta - desde) +1 )
+
+--desdeHasta 3,5
+--[3,4,5]
+
+data AEB a = Nil | Bin (AB a) a (AB a)
+--Usando recursión explícita, denir los esquemas de recursión estructural (foldAB) y primitiva (recAB), y dar sus tipos
+
+foldAB::(a->b)->(b->a->b->b)->AEB a ->b
+foldAB casoHoja casoAeb arbol if  
+
+
 --1)
 --max2::Float->Float N
 --normaVectorial::Float->Float->Float N
@@ -140,17 +183,18 @@ mapPares f (x:xs) = f(x):rec xs
 --evaluarEnCero 
 
 --2)
+{--
 curry :: ((a, b) -> c) -> a -> b -> c
 curry f x y = f (x, y)
 
 uncurry::a->b->c->((a,b)->c)
 uncurry f(x,y)= f x y 
-
+--}
 --No
 
 --3)
-
+{--
 foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _ z []     = z
 foldr f z (x:xs) = f x (foldr f z xs)
-
+--}
