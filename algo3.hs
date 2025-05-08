@@ -163,16 +163,16 @@ genLista arranca f cant = foldNat(\_ acc -> acc ++ [f (last acc)]) [arranca] (ca
 --segundo), devuelve una lista de números consecutivos desde el primero hasta el segundo.
 
 desdeHasta::Integer->Integer->[Integer]
-desdeHasta desde hasta = genLista desde (+1) ((hasta - desde) +1 )
+desdeHasta desde hasta = genLista desde (+1) ((desde - hasta) +1 )
 
 --desdeHasta 3,5
 --[3,4,5]
 
-data AEB a = Nil | Bin (AB a) a (AB a)
+data AEB a = Nil | Bin (AEB a) a (AEB a)
 --Usando recursión explícita, denir los esquemas de recursión estructural (foldAB) y primitiva (recAB), y dar sus tipos
 
-foldAB::(a->b)->(b->a->b->b)->AEB a ->b
-foldAB casoHoja casoAeb arbol if  
+--foldAB::(a->b)->(b->a->b->b)->AEB a ->b
+--foldAB casoHoja casoAeb arbol if  
 
 
 --1)
