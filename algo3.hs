@@ -120,7 +120,7 @@ recr f z (x : xs) = f x xs (recr f z xs)
 --6
 sacarUna :: Eq a => a -> [a] -> [a]
 sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list 
-
+ 
 --b) es primitiva porque utiliza la cola explicitamente
 
 
@@ -163,16 +163,21 @@ genLista arranca f cant = foldNat(\_ acc -> acc ++ [f (last acc)]) [arranca] (ca
 --segundo), devuelve una lista de números consecutivos desde el primero hasta el segundo.
 
 desdeHasta::Integer->Integer->[Integer]
-desdeHasta desde hasta = genLista desde (+1) ((desde - hasta) +1 )
+desdeHasta desde hasta = genLista desde (+1) ((hasta - desde) +1 )
 
 --desdeHasta 3,5
 --[3,4,5]
 
-data AEB a = Nil | Bin (AEB a) a (AEB a)
 --Usando recursión explícita, denir los esquemas de recursión estructural (foldAB) y primitiva (recAB), y dar sus tipos
 
---foldAB::(a->b)->(b->a->b->b)->AEB a ->b
---foldAB casoHoja casoAeb arbol if  
+data AEB a = Hoja | Rama (AEB a) a (AEB a)
+  deriving (Show)
+
+
+foldAB :: b -> (b -> a -> b -> b) -> AEB a -> b
+foldAB z f Hoja = z
+foldAB z f (Rama i x d) = f (foldAB z f i) x (foldAB z f d)
+
 
 
 --1)
