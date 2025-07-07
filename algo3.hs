@@ -34,7 +34,7 @@ factorAux n cont num | n==cont = num
 
 
 cantDivisoresPrimos::Int->Int
-cantDivisoresPrimos n =largo(divisoresPrimos n 1)
+cantDivisoresPrimos n =largo (divisoresPrimos n 1)
 
 largo::[Int]->Int
 largo []=0
@@ -42,11 +42,11 @@ largo (x:xs) =1+( largo xs )
 
 divisoresPrimos::Int->Int->[Int]
 divisoresPrimos  num cont | num < cont = []
-                          | (mod num cont) == 0 && esPrimo(cont) = cont : divisoresPrimos num (cont+1)
+                          | (mod num cont) == 0 && esPrimo (cont) = cont : divisoresPrimos num (cont+1)
                           | otherwise = divisoresPrimos num (cont+1)
 
 esPrimo::Int->Bool
-esPrimo n = if largo(divisores n 1) == 2 then True else False
+esPrimo n = if largo (divisores n 1) == 2 then True else False
 
 divisores::Int->Int->[Int]
 divisores num cont | cont > num = []
@@ -91,13 +91,13 @@ filter p []  =  []
 filter p (x:xs) = if p x then x:filter p xs else filter p xs
 
 filterfoldr::(a->Bool)->[a]->[a]
-filterfoldr p = foldr (\x xs -> if p x then x:xs else xs)[] 
+filterfoldr p = foldr (\x xs -> if p x then x:xs else xs) []
 
 foldl::(b->a->b )->b->[a]->b
 foldl funcion acumulador [] = acumulador
 foldl funcion acumulador (x:xs) = foldl funcion (funcion acumulador x) xs
 
-bin2dec = foldl(\ac b-> b + 2 * ac)
+bin2dec = foldl (\ac b-> b + 2 * ac)
 
 {--
 data AEB a = Hoja a | Bin (AEB a) a (AEB a)
@@ -119,8 +119,8 @@ recr f z (x : xs) = f x xs (recr f z xs)
 
 --6
 sacarUna :: Eq a => a -> [a] -> [a]
-sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list 
- 
+sacarUna num list = recr (\x xs rec -> if num == x then xs else x:rec ) [] list
+
 --b) es primitiva porque utiliza la cola explicitamente
 
 
@@ -157,7 +157,7 @@ potencia num pot = foldNat (\_ acc -> num * acc) 1 pot
 
 --10
 genLista::a->(a->a)->Integer->[a]
-genLista arranca f cant = foldNat(\_ acc -> acc ++ [f (last acc)]) [arranca] (cant-1)                 
+genLista arranca f cant = foldNat (\_ acc -> acc ++ [f (last acc)]) [arranca] (cant-1)
 
 --Usando genLista, denir la función desdeHasta, que dado un par de números (el primero menor que el
 --segundo), devuelve una lista de números consecutivos desde el primero hasta el segundo.
@@ -203,3 +203,43 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _ z []     = z
 foldr f z (x:xs) = f x (foldr f z xs)
 --}
+
+
+{--(El ejercicio prohíbe usar recursion explicita, a menos que se indique lo contrario)
+Se define el tipo de datos ABNV a, que representa arboles binarios no vacios con elementos de tipo a:
+data ABNV a = Hoja a | Uni a (ABNV a) | Bi (ABNV a) a (ABNV a)
+Definimos el siguiente arbol para utilizar en ejemplos:
+abnv = Bi (Uni 2 (Hoja 1)) 3 (Bi (Hoja 4) 5 (Uni 2 (Hoja 7)))
+
+a) Definir las funciones foldABNV y recABNV, que implementan respectivamente los esquemas de recursion estructural y primitiva para el tipo ABNV a. (Este es el inciso en el que se permite utilizar recursion explicita).
+b) Definir la funcion elemABNV :: Eq a => a -> ABNV a -> Bool, que indica si un elemento pertenece al arbol.
+c) Definir la función reemplazarUno :: Eq a => a -> a -> ABNV a -> ABNV a que, dados dos elementos x e y, y un arbol; devuelve un arbol como el original, pero reemplazando la primera aparición de x por y 
+(La primera desde la raíz, yendo de izquierda a derecha, en el orden de preorder).
+
+Por ejemplo:
+reemplazarUno 2 5 abnv => Bi (Uni 5 (Hoja 1)) 3 (Bi (Hoja 4) 5 (Uni 2 (Hoja 7))).
+reemplazarUno 2 5 (Hoja 1) => Hoja 1.--}
+data ABNV a = Hoja a | Uni a (ABNV a) | Bi (ABNV a) a (ABNV a)
+  deriving (Show)
+
+foldABNV::(a->b)->(a->b->b)->(b->a->b->b)->ABNV a->b
+foldABNV fBase fUni fBi (Hoja raiz)       = fBase raiz
+foldABNV fBase fUni fBi (Uni Raiz Arbol)  = fUni Raiz (foldABNV fBase fUni fBi Arbol)
+foldABNV fBase fUni fBi (Bi Izq Raiz Der) = fBi (foldABNV fBase fUni fBi Izq) Raiz (foldABNV fBase fUni fBi Der)
+
+recABNV::(a->b)->(a->ABNV a->b->b)->(ABNV a->b->a->ABNV a->b->b)->ABNV a->b
+recABNV fBase fUni fBi (Hoja raiz)       = fBase raiz
+recABNV fBase fUni fBi (Uni Raiz Arbol)  = fUni Raiz Arbol (recABNV fBase fUni fBi Arbol)
+recABNV fBase fUni fBi (Bi Izq Raiz Der) = fBi Izq (recABNV fBase fUni fBi Izq) Raiz Der (recABNV fBase fUni fBi Der)
+
+elemABNV :: Eq a => a -> ABNV a -> Bool
+elemABNV num arbol =foldABNV (\elem ->num == elem)
+                             (\raiz rec-> if num == elem then True else rec)
+                             (\izq raiz der-> if num == elem then True else izq && der) arbol
+
+reemplazarUno :: Eq a => a -> a -> ABNV a -> ABNV a
+reemplazarUno x y arbol = recABNV(\raiz -> if x==raiz then Hoja y else Hoja raiz)
+                                 (\raiz resto recResto -> if x==raiz then Uni y resto else Uni raiz recResto)
+                                 (\restoIzq recIzq raiz restoDer recDer -> if x==raiz then Bi (restoIzq) raiz (restoDer) else 
+                                        (if elem x restoIzq then Bi recIzq raiz restoDer else Bi restoIzq raiz recDer)
+                                 )arbol
