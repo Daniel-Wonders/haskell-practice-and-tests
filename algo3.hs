@@ -1,3 +1,7 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use infix" #-}
+{-# HLINT ignore "Redundant bracket" #-}
+{-# HLINT ignore "Eta reduce" #-}
 import Prelude hiding (foldr, map, filter, foldl)
 -- practica 0
 --
@@ -241,5 +245,6 @@ reemplazarUno :: Eq a => a -> a -> ABNV a -> ABNV a
 reemplazarUno x y arbol = recABNV(\raiz -> if x==raiz then Hoja y else Hoja raiz)
                                  (\raiz resto recResto -> if x==raiz then Uni y resto else Uni raiz recResto)
                                  (\restoIzq recIzq raiz restoDer recDer -> if x==raiz then Bi (restoIzq) raiz (restoDer) else 
-                                        (if elem x restoIzq then Bi recIzq raiz restoDer else Bi restoIzq raiz recDer)
+                                        (if elem x restoIzq then Bi recIzq raiz restoDer else Bi restoIzq raiz recDer) 
                                  )arbol
+
