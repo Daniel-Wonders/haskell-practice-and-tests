@@ -237,14 +237,18 @@ recABNV fBase fUni fBi (Uni Raiz Arbol)  = fUni Raiz Arbol (recABNV fBase fUni f
 recABNV fBase fUni fBi (Bi Izq Raiz Der) = fBi Izq (recABNV fBase fUni fBi Izq) Raiz Der (recABNV fBase fUni fBi Der)
 
 elemABNV :: Eq a => a -> ABNV a -> Bool
-elemABNV num arbol =foldABNV (\elem ->num == elem)
-                             (\raiz rec-> if num == elem then True else rec)
-                             (\izq raiz der-> if num == elem then True else izq && der) arbol
+elemABNV num =
+  foldABNV
+    (\x -> num == x)                              -- caso Hoja
+    (\raiz rec -> num == raiz || rec)             -- caso Unario
+    (\izq raiz der -> num == raiz || izq || der)  -- caso Binario
+
 
 reemplazarUno :: Eq a => a -> a -> ABNV a -> ABNV a
 reemplazarUno x y arbol = recABNV(\raiz -> if x==raiz then Hoja y else Hoja raiz)
                                  (\raiz resto recResto -> if x==raiz then Uni y resto else Uni raiz recResto)
                                  (\restoIzq recIzq raiz restoDer recDer -> if x==raiz then Bi (restoIzq) raiz (restoDer) else 
-                                        (if elem x restoIzq then Bi recIzq raiz restoDer else Bi restoIzq raiz recDer) 
+                                        (if elemABNV x restoIzq then Bi recIzq raiz restoDer else Bi restoIzq raiz recDer) 
                                  )arbol
 
+a
